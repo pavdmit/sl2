@@ -68,6 +68,9 @@ class ImagesLabelWindow(QWidget):
         self.addnew_btn.clicked.connect(self.open_file)
         self.import_to_csv_btn.clicked.connect(lambda: import_to_csv(dataset_name))
         self.import_to_excel_btn.clicked.connect(lambda: import_to_excel(dataset_name))
+        self.delete_btn.clicked.connect(lambda: delete_image_file(self.list_of_files.currentItem().text(),
+                                                                  self.dataset_name))
+        self.delete_btn.clicked.connect(lambda: fill_files_in_dataset(self.list_of_files, dataset_name))
 
     def open_file(self):
         try:
@@ -119,6 +122,14 @@ class TextLabelWindow(QWidget):
         self.delete_btn.clicked.connect(lambda: fill_text_label_elements(self.list_of_labels,
                                                                          self.text,
                                                                          self.texts_list.currentText()))
+        self.import_to_csv_btn.clicked.connect(lambda: import_to_csv_text(self.dataset_name))
+        self.delete_cur_text_btn.clicked.connect(self.delete_text_file)
+
+    def delete_text_file(self):
+        delete_text_file(self.texts_list.currentText(), self.dataset_name)
+        self.texts_list.clear()
+        self.texts_list.addItems(get_text_files_names(self.dataset_name))
+        fill_text_label_elements(self.list_of_labels, self.text, self.texts_list.currentText())
 
     def open_file(self):
         try:
@@ -308,6 +319,8 @@ class Account(QMainWindow):
         self.members_delete_btn.clicked.connect(lambda: delete_member(self.members_table.currentItem().text(),
                                                                       self.team_name))
         self.members_delete_btn.clicked.connect(lambda: fill_members(self.members_table, self.team_name))
+        self.files_refresh_btn.clicked.connect(lambda: fill_image_files(self.image_files_table, self.workspace_name))
+        self.files_refresh_btn.clicked.connect(lambda: fill_text_files(self.text_files_table, self.workspace_name))
 
     def cell_changed(self, item):
         edit_project(item.row(), item.column(), self.datasets_table, self.workspace_name)

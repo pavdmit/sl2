@@ -190,6 +190,33 @@ QPushButton:hover {
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="delete_btn">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+	background-color: rgb(59, 146, 212);
+	color:rgb(243,247,254);
+	border: 0px solid;
+	border-radius: 12px;
+	font: 13pt &quot;Andale Mono&quot;;
+}
+
+QPushButton:hover {
+	background-color: rgb(243,247,254);
+	color:rgb(59, 146, 212);
+}</string>
+       </property>
+       <property name="text">
+        <string>Delete</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="save_btn">
        <property name="minimumSize">
         <size>

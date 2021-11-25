@@ -62,7 +62,8 @@ def get_text_files_names(dataset_name):
 
 
 def fill_text_label_elements(list_of_labels, text_label, current_file_name):
-    cur.execute("SELECT text_fragment, label, position FROM text_files_labels WHERE file_name = '{}'".format(current_file_name))
+    cur.execute(
+        "SELECT text_fragment, label, position FROM text_files_labels WHERE file_name = '{}'".format(current_file_name))
     label_with_text = cur.fetchall()
     if len(label_with_text) == 0:
         label_with_text.append(("No text", "No label", "No pos"))
@@ -104,6 +105,13 @@ def delete_text_label(text_fragment_to_delete):
     con.commit()
 
 
+def delete_image_file(image_name, dataset_name):
+    cur.execute("DELETE FROM image_files WHERE file_name = '{}'".format(image_name))
+    cur.execute(
+        "DELETE FROM dataset_to_file WHERE file_name = '{}' AND dataset_name = '{}'".format(image_name, dataset_name))
+    con.commit()
+
+
 def add_dataset(dataset_name_input, task_type_input, description_input, workspace_name):  # TODO
     cur.execute(
         "INSERT INTO datasets VALUES ( '{}', '{}','{}')".format(dataset_name_input, task_type_input, description_input))
@@ -112,7 +120,7 @@ def add_dataset(dataset_name_input, task_type_input, description_input, workspac
     con.commit()
 
 
-def import_to_csv(dataset_name, file_name="output.csv"):
+def import_to_csv(dataset_name, file_name="image_output.csv"):
     cur.execute("SELECT file_name, x1, y1, x2, y2, class, image_width, image_height FROM image_files WHERE file_name "
                 "IN (SELECT file_name FROM dataset_to_file WHERE dataset_name = '{}')".format(dataset_name))
     image_data = cur.fetchall()
@@ -124,7 +132,26 @@ def import_to_csv(dataset_name, file_name="output.csv"):
         writer.writerows(image_data)
 
 
-def import_to_excel(dataset_name, file_name="output.xlsx"):
+def import_to_csv_text(dataset_name, file_name="text_output.csv"):
+    cur.execute("SELECT file_name, text_fragment, label, position FROM text_files_labels WHERE file_name "
+                "IN (SELECT file_name FROM dataset_to_file WHERE dataset_name = '{}')".format(dataset_name))
+    text_data = cur.fetchall()
+    header = ['file_name', 'text_fragment', 'label', 'position']
+    file_path = Path(Path.cwd(), 'output data', file_name)
+    with open(file_path, 'w', encoding='UTF8', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(header)
+        writer.writerows(text_data)
+
+
+def delete_text_file(text_file_name, dataset_name):
+    cur.execute("DELETE FROM text_files WHERE file_name = '{}'".format(text_file_name))
+    cur.execute(
+        "DELETE FROM dataset_to_file WHERE file_name = '{}' AND dataset_name = '{}'".format(text_file_name, dataset_name))
+    con.commit()
+
+
+def import_to_excel(dataset_name, file_name="image_output.xlsx"):
     cur.execute("SELECT file_name, x1, y1, x2, y2, class, image_width, image_height FROM image_files WHERE file_name "
                 "IN (SELECT file_name FROM dataset_to_file WHERE dataset_name = '{}')".format(dataset_name))
     image_data = cur.fetchall()
@@ -275,7 +302,8 @@ def get_team_workflows(current_team):
     return workflow_names
 
 
-def fill_image_file_params(file_name, picture, x1_input, y1_input, x2_input, y2_input, class_input, colour, figure_type):
+def fill_image_file_params(file_name, picture, x1_input, y1_input, x2_input, y2_input, class_input, colour,
+                           figure_type):
     cur.execute(
         "SELECT x1, y1, x2, y2, class, image_width, image_height FROM image_files WHERE file_name = '{}'".format(
             file_name))
@@ -362,7 +390,7 @@ def fill_projects(table_obj, workspace_name):
     table_obj.verticalHeader().setVisible(False)
 
 
-def search_in_projects(table_obj, query,workspace_name):
+def search_in_projects(table_obj, query, workspace_name):
     if query is not None:
         split_query = query.split()
         if len(split_query) != 3:
@@ -412,7 +440,7 @@ def edit_project(row, column, table_obj, workspace_name):  # TODO
                                                                                  edited_line[2],
                                                                                  exact_line[0],
                                                                                  exact_line[1],
-                                                                                 exact_line[2],))
+                                                                                 exact_line[2], ))
     con.commit()
 
 
@@ -450,11 +478,11 @@ def delete_member(user_email, team_name):
     con.commit()
 
 
-def add_member(user_email,team_name):
+def add_member(user_email, team_name):
     cur.execute("SELECT id FROM users WHERE email = '{}'".format(user_email))
     user_id = cur.fetchall()
     user_id = user_id[0][0]
-    cur.execute("INSERT INTO team_to_user VALUES ( '{}', '{}')".format(user_id,team_name))
+    cur.execute("INSERT INTO team_to_user VALUES ( '{}', '{}')".format(user_id, team_name))
     con.commit()
 
 

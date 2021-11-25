@@ -46,8 +46,8 @@
    <widget class="QWidget" name="verticalLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>560</y>
+      <x>590</x>
+      <y>600</y>
       <width>191</width>
       <height>121</height>
      </rect>
@@ -135,7 +135,7 @@ border-radius: 15px;
     <property name="geometry">
      <rect>
       <x>480</x>
-      <y>680</y>
+      <y>720</y>
       <width>301</width>
       <height>51</height>
      </rect>
@@ -201,7 +201,7 @@ QPushButton:hover {
     <property name="geometry">
      <rect>
       <x>480</x>
-      <y>560</y>
+      <y>600</y>
       <width>111</width>
       <height>121</height>
      </rect>
@@ -349,6 +349,72 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Andale Mono'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;thywthe&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>550</y>
+      <width>301</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QPushButton" name="import_to_csv_btn">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+	background-color: rgb(59, 146, 212);
+	color:rgb(243,247,254);
+	border: 0px solid;
+	border-radius: 12px;
+	font: 13pt &quot;Andale Mono&quot;;
+}
+
+QPushButton:hover {
+	background-color: rgb(243,247,254);
+	color:rgb(59, 146, 212);
+}</string>
+       </property>
+       <property name="text">
+        <string>Import to csv</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="delete_cur_text_btn">
+       <property name="minimumSize">
+        <size>
+         <width>170</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+	background-color: rgb(59, 146, 212);
+	color:rgb(243,247,254);
+	border: 0px solid;
+	border-radius: 12px;
+	font: 13pt &quot;Andale Mono&quot;;
+}
+
+QPushButton:hover {
+	background-color: rgb(243,247,254);
+	color:rgb(59, 146, 212);
+}</string>
+       </property>
+       <property name="text">
+        <string>Delete current text</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
  </widget>
