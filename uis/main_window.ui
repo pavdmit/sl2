@@ -445,7 +445,7 @@ QComboBox::drop-down
         </rect>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>4</number>
        </property>
        <widget class="QWidget" name="workspaces_page">
         <widget class="QWidget" name="horizontalLayoutWidget_7">
@@ -1869,103 +1869,6 @@ QPushButton:hover {
            </layout>
           </item>
          </layout>
-        </widget>
-        <widget class="QScrollArea" name="scrollArea">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>80</y>
-           <width>800</width>
-           <height>670</height>
-          </rect>
-         </property>
-         <property name="widgetResizable">
-          <bool>true</bool>
-         </property>
-         <widget class="QWidget" name="scrollAreaWidgetContents">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>798</width>
-            <height>668</height>
-           </rect>
-          </property>
-          <widget class="QFrame" name="frame_3">
-           <property name="geometry">
-            <rect>
-             <x>80</x>
-             <y>80</y>
-             <width>161</width>
-             <height>211</height>
-            </rect>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-           </property>
-          </widget>
-          <widget class="QFrame" name="frame_4">
-           <property name="geometry">
-            <rect>
-             <x>90</x>
-             <y>380</y>
-             <width>171</width>
-             <height>191</height>
-            </rect>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-           </property>
-          </widget>
-          <widget class="QFrame" name="frame_5">
-           <property name="geometry">
-            <rect>
-             <x>310</x>
-             <y>590</y>
-             <width>120</width>
-             <height>80</height>
-            </rect>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-           </property>
-          </widget>
-          <widget class="QMdiArea" name="mdiArea">
-           <property name="geometry">
-            <rect>
-             <x>530</x>
-             <y>260</y>
-             <width>200</width>
-             <height>160</height>
-            </rect>
-           </property>
-          </widget>
-          <widget class="QFrame" name="frame_6">
-           <property name="geometry">
-            <rect>
-             <x>380</x>
-             <y>250</y>
-             <width>120</width>
-             <height>80</height>
-            </rect>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::StyledPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Raised</enum>
-           </property>
-          </widget>
-         </widget>
         </widget>
        </widget>
       </widget>

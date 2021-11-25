@@ -4,7 +4,7 @@ from pathlib import Path
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog
+from PyQt5.QtWidgets import QApplication, QWidget, QFileDialog, QPushButton
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.uic import loadUi
@@ -195,6 +195,27 @@ class EditAccountWindow(QWidget):
                                          self.gender_edit_line))
 
 
+class Note:
+    def __init__(self):
+        self.frame = QtWidgets.QFrame()
+        self.frame.setGeometry(QtCore.QRect(269, 89, 331, 181))
+        self.frame.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+
+
+class Ui_Form:
+    def __init__(self):
+        self.frame = QtWidgets.QFrame()
+        self.frame.setGeometry(QtCore.QRect(0, 0, 240, 130))
+        self.frame.setMinimumSize(QtCore.QSize(240, 130))
+        self.frame.setMaximumSize(QtCore.QSize(240, 130))
+        self.frame.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame.setObjectName("frame")
+
 class PlainWidget:
     def __init__(self, page, workflow_name, coordinates, stackedWidget, projects_page):
         self.plain_widget = QtWidgets.QWidget(page)
@@ -261,6 +282,7 @@ class Account(QMainWindow):
         fill_projects(self.datasets_table, self.workspace_name)
         fill_image_files(self.image_files_table, self.workspace_name)
         fill_text_files(self.text_files_table, self.workspace_name)
+        # self.fill_tasks()
         self.image_files_table.setColumnWidth(0, 300)
         self.image_files_table.setColumnWidth(1, 280)
         self.text_files_table.setColumnWidth(0, 150)
@@ -339,6 +361,24 @@ class Account(QMainWindow):
                 if count >= len(self.workflow_names):
                     break
             bottom_margin += 185
+
+    '''def fill_tasks(self,):
+        button = QPushButton("kindled")
+        button2 = QPushButton("kindled")
+        for i in range (10):
+            frame = QtWidgets.QFrame()
+            frame.setGeometry(QtCore.QRect(0, 0, 240, 130))
+            frame.setMinimumSize(QtCore.QSize(240, 130))
+            frame.setMaximumSize(QtCore.QSize(240, 130))
+            frame.setStyleSheet("background-color: rgb(255, 255, 255);")
+            frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+            frame.setFrameShadow(QtWidgets.QFrame.Raised)
+            frame.setObjectName("frame")
+            # self.grid.addWidget(button, 0, 0)
+            # self.grid.addWidget(button2, 1, 1)
+            self.grid.addWidget(frame, i, 1)
+        # self.grid.addWidget(fr, 3, 1)'''
+
 
     def edit_account(self):
         self.edit_window = EditAccountWindow(self.user_id)
