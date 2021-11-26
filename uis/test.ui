@@ -1,26 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>572</height>
+    <width>230</width>
+    <height>134</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Form</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <widget class="QFrame" name="frame">
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);
+border-radius:15ptx;</string>
+  </property>
+  <widget class="QFrame" name="frame">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>230</width>
+     <height>134</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::NoFrame</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QPushButton" name="title_and_save_btn">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>130</y>
-      <width>471</width>
-      <height>191</height>
+      <x>0</x>
+      <y>0</y>
+      <width>230</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+background-color: rgb(78, 0, 234);
+color:rgb(243,247,254);
+border: 0px solid;
+border-top-left-radius: 15px;
+border-top-right-radius: 15px;
+font: 20pt &quot;Andale Mono&quot; ;
+
+}
+QPushButton:hover {
+background-color: rgb(254, 204, 102);
+color:rgb(59, 146, 212);
+}</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="note_text">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>32</y>
+      <width>230</width>
+      <height>70</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -29,22 +75,36 @@
     <property name="frameShape">
      <enum>QFrame::NoFrame</enum>
     </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
+   </widget>
+   <widget class="QPushButton" name="finish_task_btn">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>102</y>
+      <width>230</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+background-color: rgb(78, 0, 234);
+color:rgb(243,247,254);
+border: 0px solid;
+border-bottom-left-radius: 15px;
+border-bottom-right-radius: 15px;
+font: 20pt &quot;Andale Mono&quot; ;
+
+}
+QPushButton:hover {
+background-color: rgb(254, 204, 102);
+color:rgb(59, 146, 212);
+}</string>
+    </property>
+    <property name="text">
+     <string>Delete</string>
     </property>
    </widget>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>24</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

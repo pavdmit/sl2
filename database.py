@@ -120,6 +120,18 @@ def add_dataset(dataset_name_input, task_type_input, description_input, workspac
     con.commit()
 
 
+def add_workspace(workspace_name, description_input, team_name):
+    cur.execute(
+        "INSERT INTO workspace_to_team VALUES ( '{}', '{}', '{}')".format(team_name, workspace_name, description_input))
+    con.commit()
+
+
+def add_task(task_title, task_text, team_name):
+    cur.execute("INSERT INTO task_to_team VALUES ( '{}', '{}')".format(task_title, team_name))
+    cur.execute("INSERT INTO tasks VALUES ( '{}', '{}')".format(task_title, task_text))
+    con.commit()
+
+
 def import_to_csv(dataset_name, file_name="image_output.csv"):
     cur.execute("SELECT file_name, x1, y1, x2, y2, class, image_width, image_height FROM image_files WHERE file_name "
                 "IN (SELECT file_name FROM dataset_to_file WHERE dataset_name = '{}')".format(dataset_name))
@@ -147,7 +159,8 @@ def import_to_csv_text(dataset_name, file_name="text_output.csv"):
 def delete_text_file(text_file_name, dataset_name):
     cur.execute("DELETE FROM text_files WHERE file_name = '{}'".format(text_file_name))
     cur.execute(
-        "DELETE FROM dataset_to_file WHERE file_name = '{}' AND dataset_name = '{}'".format(text_file_name, dataset_name))
+        "DELETE FROM dataset_to_file WHERE file_name = '{}' AND dataset_name = '{}'".format(text_file_name,
+                                                                                            dataset_name))
     con.commit()
 
 
@@ -294,12 +307,21 @@ def get_team_names(user_id):
 
 
 def get_team_workflows(current_team):
-    cur.execute("SELECT workspace_name FROM workspace_to_team WHERE team_name = '{}'".format(current_team))
-    workflow_names = cur.fetchall()
-    workflow_names = [workflow_names[i][0] for i in range(len(workflow_names))]
-    if len(workflow_names) == 0:
-        workflow_names.append("No workspaces")
-    return workflow_names
+    cur.execute("SELECT workspace_name, workspace_description FROM workspace_to_team WHERE team_name = '{}'".format(current_team))
+    workspace_data = cur.fetchall()
+    workspace_names = [workspace_data[i][0] for i in range(len(workspace_data))]
+    workspace_data = [workspace_data[i] for i in range(len(workspace_data))]
+    if len(workspace_data) == 0:
+        workspace_data.append("No workspaces")
+    print(workspace_data)
+    return workspace_names, workspace_data
+
+
+def get_tasks(team_name):
+    cur.execute("SELECT task_title, task_text FROM tasks WHERE task_title IN"
+                "(SELECT task_title FROM task_to_team WHERE team_name = '{}')".format(team_name))
+    tasks_data = cur.fetchall()
+    return tasks_data
 
 
 def fill_image_file_params(file_name, picture, x1_input, y1_input, x2_input, y2_input, class_input, colour,
@@ -321,20 +343,24 @@ def fill_image_file_params(file_name, picture, x1_input, y1_input, x2_input, y2_
     width = file_params[5]
     height = file_params[6]
     picture.resize(width, height)
-    image_root = path_to_ui = Path(Path.cwd(), 'data', file_name)
-    image = PIL.Image.open(image_root)
-    draw = ImageDraw.Draw(image)
-    if figure_type == 'Rectangle':
-        draw.line(
-            xy=(
-                (x1, y1),
-                (x1, y2),
-                (x2, y2),
-                (x2, y1),
-                (x1, y1)
-            ), fill=colour, width=3)
-    elif figure_type == 'Ellipse':
-        draw.ellipse((x1, y1, x2, y2), outline=colour, width=3)
+    try:
+        image_root = path_to_ui = Path(Path.cwd(), 'data', file_name)
+        image = PIL.Image.open(image_root)
+        draw = ImageDraw.Draw(image)
+        if figure_type == 'Rectangle':
+            draw.line(
+                xy=(
+                    (x1, y1),
+                    (x1, y2),
+                    (x2, y2),
+                    (x2, y1),
+                    (x1, y1)
+                ), fill=colour, width=3)
+        elif figure_type == 'Ellipse':
+            draw.ellipse((x1, y1, x2, y2), outline=colour, width=3)
+    except FileNotFoundError:
+        image_root = path_to_ui = Path(Path.cwd(), 'data', 'error_image.jpg')
+        image = PIL.Image.open(image_root)
     q_image = ImageQt(image).copy()
     pixmap = QPixmap.fromImage(q_image)
     picture.clear()
@@ -388,6 +414,17 @@ def fill_projects(table_obj, workspace_name):
             table_obj.setItem(k, i, QTableWidgetItem(str(row[i])))
         k += 1
     table_obj.verticalHeader().setVisible(False)
+
+
+def finish_task(task_title):
+    cur.execute("DELETE FROM tasks WHERE task_title = '{}'".format(task_title))
+    cur.execute("DELETE FROM task_to_team WHERE task_title = '{}'".format(task_title))
+    con.commit()
+
+
+def save_task_changes(task_title, task_text):
+    cur.execute("UPDATE tasks SET task_text='{}' WHERE task_title='{}'".format(task_text, task_title))
+    con.commit()
 
 
 def search_in_projects(table_obj, query, workspace_name):

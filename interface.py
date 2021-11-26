@@ -52,6 +52,7 @@ class ImagesLabelWindow(QWidget):
         self.brush_colours.addItems(['red', 'blue', 'brown', 'darkgrey', 'gold', 'pink'])
         self.brush_types.addItems(['Rectangle', 'Ellipse'])
         self.dataset_name = dataset_name
+        self.dataset_name_label.setText(self.dataset_name)
         self.list_of_files.setColumnWidth(0, 240)
         self.drawing = False
         self.list_of_files.selectionModel().selectionChanged.connect(
@@ -105,6 +106,7 @@ class TextLabelWindow(QWidget):
         path_to_ui = Path(Path.cwd(), 'uis', 'texts_label_window.ui')
         loadUi(path_to_ui, self)
         self.dataset_name = dataset_name
+        self.dataset_name_label.setText(self.dataset_name)
         files_names = get_text_files_names(self.dataset_name)
         self.texts_list.addItems(files_names)
         fill_text_label_elements(self.list_of_labels, self.text, self.texts_list.currentText())
@@ -173,8 +175,39 @@ class InviteWindow(QWidget):
         super(InviteWindow, self).__init__()
         path_to_ui = Path(Path.cwd(), 'uis', 'invite_dialog.ui')
         loadUi(path_to_ui, self)
-        self.invite_btn.clicked.connect(lambda: add_member(self.email_input.text(),team_name))
+        self.invite_btn.clicked.connect(lambda: add_member(self.email_input.text(), team_name))
         self.invite_btn.clicked.connect(lambda: fill_members(table_obj, team_name))
+
+
+class AddWorkspaceWindow(QWidget):
+    def __init__(self, team_name, workspace_names_cb):
+        super(AddWorkspaceWindow, self).__init__()
+        path_to_ui = Path(Path.cwd(), 'uis', 'add_workspace_dialog.ui')
+        loadUi(path_to_ui, self)
+        self.team_name = team_name
+        self.workspace_names_cb = workspace_names_cb
+        self.save_btn.clicked.connect(self.add_workspace)
+
+    def add_workspace(self):
+        add_workspace(self.workspace_name_input.text(), self.description_input.text(), self.team_name)
+        self.workspace_name_input.setText("")
+        self.description_input.setText("")
+        self.workspace_names_cb.addItem(self.workspace_name_input.text())
+
+
+
+class AddTaskWindow(QWidget):
+    def __init__(self, team_name):
+        super(AddTaskWindow, self).__init__()
+        path_to_ui = Path(Path.cwd(), 'uis', 'add_task_dialog.ui')
+        loadUi(path_to_ui, self)
+        self.team_name = team_name
+        self.save_btn.clicked.connect(self.add_task)
+
+    def add_task(self):
+        add_task(self.task_title_input.text(),self.task_text_input.text(), self.team_name)
+        self.task_title_input.setText("")
+        self.task_text_input.setText("")
 
 
 class EditAccountWindow(QWidget):
@@ -196,28 +229,61 @@ class EditAccountWindow(QWidget):
 
 
 class Note:
-    def __init__(self):
-        self.frame = QtWidgets.QFrame()
-        self.frame.setGeometry(QtCore.QRect(269, 89, 331, 181))
-        self.frame.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+    def __init__(self, page, coordinates, title, task_text):
+        # print(title, " ", task_text)
+        self.frame = QtWidgets.QFrame(page)
+        self.frame.setGeometry(QtCore.QRect(coordinates[0], coordinates[1], 230, 134))
+        self.frame.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
+        self.title_and_save_btn = QtWidgets.QPushButton(self.frame)
+        self.title_and_save_btn.setGeometry(QtCore.QRect(0, 0, 230, 32))
+        self.title_and_save_btn.setStyleSheet("QPushButton {\n"
+                                              "background-color: rgb(78, 0, 234);\n"
+                                              "color:rgb(243,247,254);\n"
+                                              "border: 0px solid;\n"
+                                              "border-top-left-radius: 15px;\n"
+                                              "border-top-right-radius: 15px;\n"
+                                              "font: 20pt \"Andale Mono\" ;\n"
+                                              "\n"
+                                              "}\n"
+                                              "QPushButton:hover {\n"
+                                              "background-color: rgb(254, 204, 102);\n"
+                                              "color:rgb(59, 146, 212);\n"
+                                              "}")
+        self.title_and_save_btn.setText(title)
+        self.title_and_save_btn.setObjectName("title_and_save_btn")
+        self.note_text = QtWidgets.QTextEdit(self.frame)
+        self.note_text.setGeometry(QtCore.QRect(0, 32, 230, 70))
+        self.note_text.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.note_text.setPlainText(task_text)
+        self.note_text.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.note_text.setObjectName("note_text")
+        self.finish_task_btn = QtWidgets.QPushButton(self.frame)
+        self.finish_task_btn.setGeometry(QtCore.QRect(0, 102, 230, 32))
+        self.finish_task_btn.setStyleSheet("QPushButton {\n"
+                                           "background-color: rgb(78, 0, 234);\n"
+                                           "color:rgb(243,247,254);\n"
+                                           "border: 0px solid;\n"
+                                           "border-bottom-left-radius: 15px;\n"
+                                           "border-bottom-right-radius: 15px;\n"
+                                           "font: 20pt \"Andale Mono\" ;\n"
+                                           "\n"
+                                           "}\n"
+                                           "QPushButton:hover {\n"
+                                           "background-color: rgb(254, 204, 102);\n"
+                                           "color:rgb(59, 146, 212);\n"
+                                           "}")
+        self.finish_task_btn.setText("Finish task")
+        self.finish_task_btn.setObjectName("delete_btn")
+        self.title_and_save_btn.clicked.connect(lambda: save_task_changes(self.title_and_save_btn.text(),
+                                                                          self.note_text.toPlainText()))
+        self.finish_task_btn.clicked.connect(lambda: finish_task(self.title_and_save_btn.text()))
 
-
-class Ui_Form:
-    def __init__(self):
-        self.frame = QtWidgets.QFrame()
-        self.frame.setGeometry(QtCore.QRect(0, 0, 240, 130))
-        self.frame.setMinimumSize(QtCore.QSize(240, 130))
-        self.frame.setMaximumSize(QtCore.QSize(240, 130))
-        self.frame.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
 
 class PlainWidget:
-    def __init__(self, page, workflow_name, coordinates, stackedWidget, projects_page):
+    def __init__(self, page, workflow_data, coordinates, stackedWidget, projects_page):
+        print(workflow_data)
         self.plain_widget = QtWidgets.QWidget(page)
         self.plain_widget.setGeometry(QtCore.QRect(coordinates[0], coordinates[1], 230, 160))
         self.plain_widget.setObjectName("plain_widget")
@@ -237,18 +303,21 @@ class PlainWidget:
                                   "    background-color: rgb(254, 204, 102);\n"
                                   "    color:rgb(59, 146, 212);\n"
                                   "}")
-        self.button.setText(workflow_name)
+        self.button.setText(workflow_data[0])
         self.button.setObjectName("button")
         self.button.clicked.connect(lambda: stackedWidget.setCurrentWidget(projects_page))
-        self.button.clicked.connect(lambda: Account.is_clicked(workflow_name=workflow_name))
-        self.background_frame = QtWidgets.QFrame(self.plain_widget)
-        self.background_frame.setGeometry(QtCore.QRect(0, 60, 230, 100))
-        self.background_frame.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        self.button.clicked.connect(lambda: Account.is_clicked(workspace_name=workflow_data[0]))
+        self.background_label = QtWidgets.QLabel(self.plain_widget)
+        self.background_label.setGeometry(QtCore.QRect(0, 60, 230, 100))
+        self.background_label.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+                                            "    font: 20pt \"Andale Mono\";\n"
                                             "border-bottom-right-radius: 15px;\n"
                                             "border-bottom-left-radius:  15px;")
-        self.background_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.background_frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.background_frame.setObjectName("background_frame")
+        if workflow_data[1] is not None:
+            self.background_label.setText(workflow_data[1])
+        self.background_label.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.background_label.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.background_label.setObjectName("background_frame")
 
 
 class Account(QMainWindow):
@@ -262,6 +331,8 @@ class Account(QMainWindow):
         self.edit_window = None
         self.invite_window = None
         self.add_window = None
+        self.workspace_window = None
+        self.task_window = None
         user_data = load_user_account(user_id)
         self.user_photo1.setText(str(user_data[1][0] + user_data[3][0]))
         self.user_photo2.setText(str(user_data[1][0] + user_data[3][0]))
@@ -272,17 +343,18 @@ class Account(QMainWindow):
         # Initial window settings
         team_names = get_team_names(user_id)
         self.team_name = team_names[0]
+        self.tasks_data = get_tasks(self.team_name)
         self.team_names_cb.addItems(team_names)
         self.team_picture.setText(self.team_name[0])
-        self.workflow_names = get_team_workflows(team_names[0])
-        self.workspace_name = self.workflow_names[0]
-        self.workspace_names_cb.addItems(self.workflow_names)
+        self.workspace_names, self.workspace_data = get_team_workflows(team_names[0])
+        self.workspace_name = self.workspace_data[0][0]
+        self.workspace_names_cb.addItems(self.workspace_names)
         self.workspace_picture.setText(self.workspace_name[0])
         fill_members(self.members_table, self.team_name)
         fill_projects(self.datasets_table, self.workspace_name)
         fill_image_files(self.image_files_table, self.workspace_name)
         fill_text_files(self.text_files_table, self.workspace_name)
-        # self.fill_tasks()
+        self.fill_tasks(self.tasks_data)
         self.image_files_table.setColumnWidth(0, 300)
         self.image_files_table.setColumnWidth(1, 280)
         self.text_files_table.setColumnWidth(0, 150)
@@ -321,6 +393,8 @@ class Account(QMainWindow):
         self.edit_btn4.clicked.connect(self.edit_account)
         self.edit_btn5.clicked.connect(self.edit_account)
         self.invite_btn.clicked.connect(self.invite_user)
+        self.workspace_add_btn.clicked.connect(self.add_workspace)
+        self.add_task_btn.clicked.connect(self.add_task)
         self.search_btn.clicked.connect(lambda: fill_image_files(self.image_files_table, self.workspace_name,
                                                                  self.search_line.text()))
         self.search_btn.clicked.connect(lambda: fill_text_files(self.text_files_table, self.workspace_name,
@@ -347,18 +421,44 @@ class Account(QMainWindow):
     def cell_changed(self, item):
         edit_project(item.row(), item.column(), self.datasets_table, self.workspace_name)
 
-    def fill_workspaces(self):
+    def fill_workspaces(self, searched_workspaces=None):
+        print('filled')
+        if searched_workspaces is None:
+            searched_workspaces = self.workspace_data
         bottom_margin = 100
         count = 0
-        for i in range((len(self.workflow_names) // 3) + 1):
+        for i in range((len(searched_workspaces) // 3 + 1)):
             left_margin = 25
             for j in range(3):
-                plain_widget = PlainWidget(self.workspaces_page, self.workflow_names[count],
-                                           [left_margin, bottom_margin],
-                                           self.stackedWidget, self.projects_page)
+                try:
+                    plain_widget = PlainWidget(self.workspaces_page, searched_workspaces[count],
+                                               [left_margin, bottom_margin],
+                                               self.stackedWidget, self.projects_page)
+                except IndexError:
+                    break
                 left_margin += 255
                 count += 1
-                if count >= len(self.workflow_names):
+                if count >= len(searched_workspaces):
+                    break
+            bottom_margin += 185
+
+    def fill_tasks(self, searched_tasks=None):
+        if searched_tasks is None:
+            searched_tasks = self.tasks_data
+        bottom_margin = 100
+        count = 0
+        print(searched_tasks)
+        for i in range((len(searched_tasks) // 3 + 1)):
+            left_margin = 25
+            for j in range(3):
+                try:
+                    note_widget = Note(self.tasks_page, [left_margin, bottom_margin],
+                                       searched_tasks[count][0], searched_tasks[count][1])
+                except IndexError:
+                    break
+                left_margin += 255
+                count += 1
+                if count >= len(searched_tasks):
                     break
             bottom_margin += 185
 
@@ -378,7 +478,6 @@ class Account(QMainWindow):
             # self.grid.addWidget(button2, 1, 1)
             self.grid.addWidget(frame, i, 1)
         # self.grid.addWidget(fr, 3, 1)'''
-
 
     def edit_account(self):
         self.edit_window = EditAccountWindow(self.user_id)
@@ -422,10 +521,32 @@ class Account(QMainWindow):
         fill_members(self.members_table, self.team_name)
         fill_projects(self.datasets_table, self.workspace_name)
         self.fill_workspaces()
+        self.tasks_data = get_tasks(self.team_name)
+        self.fill_tasks(self.tasks_data)
+
+    def add_workspace(self):
+        self.workspace_window = AddWorkspaceWindow(self.team_name, self.workspace_names_cb)
+        self.window_widget = QtWidgets.QStackedWidget()
+        self.window_widget.addWidget(self.workspace_window)
+        self.window_widget.show()
+        self.workspace_data = get_team_workflows(self.team_name)
+
+    def add_task(self):
+        self.task_window = AddTaskWindow(self.team_name)
+        self.window_widget = QtWidgets.QStackedWidget()
+        self.window_widget.addWidget(self.task_window)
+        self.window_widget.show()
+        self.workspace_data = get_team_workflows(self.team_name)
 
     @staticmethod
-    def is_clicked(workflow_name):
-        print("Clicked: ", workflow_name)
+    def is_clicked(workspace_name):
+        # self.change_current_workspace_name(workspace_name)
+        print("Clicked: ", workspace_name)
+
+    def change_current_workspace_name(self, workspace_name):
+        self.self.workspace_name = workspace_name
+        combo_box_index = self.workspace_names_cb.findText(workspace_name)
+        self.workspace_names_cb.setCurrentIndex(combo_box_index)
 
     @staticmethod
     def sign_out():

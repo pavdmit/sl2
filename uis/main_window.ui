@@ -445,7 +445,7 @@ QComboBox::drop-down
         </rect>
        </property>
        <property name="currentIndex">
-        <number>4</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="workspaces_page">
         <widget class="QWidget" name="horizontalLayoutWidget_7">
@@ -485,7 +485,7 @@ color:rgb(43,59,78);</string>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_14">
+           <widget class="QPushButton" name="workspace_add_btn">
             <property name="minimumSize">
              <size>
               <width>40</width>
@@ -540,7 +540,7 @@ QPushButton:hover {
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="search_btn1">
+           <widget class="QPushButton" name="search_workspaces_btn">
             <property name="minimumSize">
              <size>
               <width>90</width>
@@ -1688,7 +1688,7 @@ color:rgb(43,59,78);</string>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_15">
+           <widget class="QPushButton" name="add_task_btn">
             <property name="minimumSize">
              <size>
               <width>40</width>

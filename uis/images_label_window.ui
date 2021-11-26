@@ -458,6 +458,23 @@ QComboBox::drop-down
      </item>
     </layout>
    </widget>
+   <widget class="QLabel" name="dataset_name_label">
+    <property name="geometry">
+     <rect>
+      <x>35</x>
+      <y>15</y>
+      <width>301</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 15pt &quot;Andale Mono&quot;;
+color:rgb(43,59,78);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
