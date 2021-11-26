@@ -310,7 +310,7 @@ class PlainWidget:
         self.background_label = QtWidgets.QLabel(self.plain_widget)
         self.background_label.setGeometry(QtCore.QRect(0, 60, 230, 100))
         self.background_label.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-                                            "    font: 20pt \"Andale Mono\";\n"
+                                            "    font: 15pt \"Andale Mono\";\n"
                                             "border-bottom-right-radius: 15px;\n"
                                             "border-bottom-left-radius:  15px;")
         if workflow_data[1] is not None:
